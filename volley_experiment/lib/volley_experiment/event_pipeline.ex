@@ -8,14 +8,17 @@ defmodule VolleyExperiment.EventPipeline do
       producer: [
         module: {
           Volley.InOrderSubscription, [
+            name: VolleyExperiment.Producer,
             connection: VolleyExperiment.Client,
-            stream_name: "test-stream"
+            stream_name: "test-stream",
+            restore_stream_position!: fn -> :start end
           ]
         },
-        transformer: {VolleyExperiment.EventPipeline, :transform, []}
+        transformer: {VolleyExperiment.EventPipeline, :transform, []},
+        concurrency: 1
       ],
       processors: [
-        default: []
+        default: [max_demand: 1, concurrency: 1]
       ],
     ])
   end
