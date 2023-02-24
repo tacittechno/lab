@@ -1,20 +1,24 @@
 defmodule VolleyExperiment.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
-  @moduledoc false
-
   use Application
 
-  @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: VolleyExperiment.Worker.start_link(arg)
-      # {VolleyExperiment.Worker, arg}
+      VolleyExperiment.Client,
+      {
+        Volley.InOrderSubscription,
+        [
+          name: VolleyExperiment.Producer,
+          connection: VolleyExperiment.Client,
+          stream_name: "test-stream",
+          # restore_stream_position!: {VolleyExperiment.Handler, :fetch_stream_position!, []}
+          restore_stream_position!: fn -> :start end
+        ]
+      },
+      VolleyExperiment.Handler
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: VolleyExperiment.Supervisor]
-    Supervisor.start_link(children, opts)
+    # :ets.new(:stream_positions, [:set, :public, :named_table])
+
+    Supervisor.start_link(children, strategy: :one_for_one)
   end
 end
