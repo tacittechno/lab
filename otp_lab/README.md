@@ -1,21 +1,12 @@
 # OtpLab
 
-**TODO: Add description**
+A collection of modules to help learn OTP and Elixir. 
 
-## Installation
+## Key-Value Store
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `otp_lab` to your list of dependencies in `mix.exs`:
+The `OtpLab.KeyValueStore` module implements a simple key-value store. It is a GenServer that stores a map of key-value pairs. It has the following API:
 
-```elixir
-def deps do
-  [
-    {:otp_lab, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/otp_lab>.
-
+* `start_link/0` - Starts the server
+* `get/2` - Gets the value for a key
+* `put/3` - Puts a key-value pair into the store
+* `delete/2` - Deletes a key-value pair from the store
